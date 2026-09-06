@@ -26,9 +26,9 @@ jobs:
       - name: Install Android NDK and CMake
         run: |
           sdkmanager "platform-tools" \
-                     "platforms;android-28" \
-                     "cmake;3.31.6" \
-                     "ndk;28.2.13676358"
+            "platforms;android-28" \
+            "cmake;3.31.6" \
+            "ndk;28.2.13676358"
 
       - name: Configure CMake
         env:
@@ -41,11 +41,35 @@ jobs:
             -DANDROID_PLATFORM=android-28
 
       - name: Build and package
-        run: cmake --build build --target levi_package
+        run: |
+          cmake --build build --target levi_package
+
+      - name: Locate LeviPack
+        run: |
+          echo "Buscando archivos .levipack..."
+          find . -type f -name "*.levipack" -print
+
+      - name: Prepare artifact
+        run: |
+          mkdir -p build/artifact
+
+          LEVIPACK=$(find build -maxdepth 1 -type f -name "*.levipack" -print -quit)
+
+          if [ -z "$LEVIPACK" ]; then
+            echo "ERROR: No se encontró ningún archivo .levipack en build/"
+            echo "Contenido de build/:"
+            find build -maxdepth 3 -type f -print
+            exit 1
+          fi
+
+          echo "LeviPack encontrado:"
+          echo "$LEVIPACK"
+
+          cp "$LEVIPACK" build/artifact/
 
       - name: Upload LeviPack
         uses: actions/upload-artifact@v4
         with:
           name: BedrockMinimal-LeviLauncher
-          path: build/*.levipack
+          path: build/artifact/*.levipack
           if-no-files-found: error

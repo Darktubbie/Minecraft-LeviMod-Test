@@ -85,8 +85,8 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E chdir
         "${PACK_ROOT}"
         ${CMAKE_COMMAND} -E tar
-        "${CMAKE_CURRENT_BINARY_DIR}/${MOD_ID}-${MOD_VERSION}.levipack"
         --format=zip
+        "${CMAKE_CURRENT_BINARY_DIR}/${MOD_ID}-${MOD_VERSION}.levipack"
         "${MOD_ID}"
 
     DEPENDS

@@ -82,13 +82,12 @@ add_custom_target(
         "${CMAKE_CURRENT_BINARY_DIR}/manifest.json"
         "${PACK_MOD}/manifest.json"
 
-    COMMAND ${CMAKE_COMMAND} -E tar
+    COMMAND ${CMAKE_COMMAND} -E chdir
+        "${PACK_ROOT}"
+        ${CMAKE_COMMAND} -E tar
         "${CMAKE_CURRENT_BINARY_DIR}/${MOD_ID}-${MOD_VERSION}.levipack"
         --format=zip
         "${MOD_ID}"
-
-    WORKING_DIRECTORY
-        "${PACK_ROOT}"
 
     DEPENDS
         ${MOD_LIBRARY_NAME}
